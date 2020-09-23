@@ -1,3 +1,14 @@
+'''
+Conta o número de nucleotídeos que são diferentes
+
+A T G C A T G C ...
+| | | | | | | | ...
+A G G C A T G C
+  ^
+  
+total = 1
+'''
+
 import Bio
 from Bio.Seq import Seq # Trabalhando com sequência
 from Bio.Alphabet import generic_dna,generic_rna,generic_protein # Para classificar o tipo do dna
