@@ -1,0 +1,42 @@
+import Bio
+from Bio import SeqIO
+from Bio.Blast import NCBIWWW, NCBIXML
+
+#pesquisando pelo BLAST ou enviando parametros de entrada
+
+print("Willkommen Sie")
+print()
+
+print("Que tipo de pesquisa pretende-se realizar? ")
+print("Com nucleotideos, marque N")
+print("Com proteinas, marque P")
+print("Com nucleotideos traduzidos em proteinas , marque X")
+print("Com proteinas traduzidas em nucleotideos, marque TN")
+print("Com nucleotideos traduzidos em nucleotideos , marque TX")
+print()
+
+programa = input();
+
+if programa == 'N':
+    arg1 = 'blastn'
+if programa == 'P':
+    arg1 = 'blastp'
+if programa == 'X':
+    arg1 = 'blastx'
+if programa == 'TN':
+    arg1 = 'tblastn'
+if programa == 'TX':
+    arg1 = 'tblastx'
+
+arg2 = 'nt'
+
+arg3 = input("Agora vc pode inserir a sequencia de nucleotideos ou o numero identificador: ")
+
+print(arg3)
+print()
+
+#usando a função qblast para enviar parâmetros de pesquisa pro blast 
+
+result_handle = NCBIWWW.qblast(arg1, arg2, arg3)
+
+print("cheguei ate aqui")
