@@ -1,0 +1,38 @@
+import Bio
+from Bio import Entrez
+from Bio import SeqIO
+
+Entrez.email = "anazebon17@gmail.com"
+
+# enviando parametros de pesquisa pelo Entrez
+
+print("Willkommen Sie")
+print()
+
+#db = input("Que tipo de pesquisa pretende-se realizar? ")
+db = "nucleotide" #pesquisando no GenBank outros complementos: 'genome', gene'
+term = input("Digite o nome do virus a ser pesquisado, o gene tb pode ser adicionado: ")
+print()
+
+gc = input("Se deseja pesquisar apenas por genomas completos, aperte G: ")
+#aux = " complete[prop]"
+
+if gc == 'G':
+    term = term + " complete[prop]"
+    #term = term + aux
+else
+    term = term
+
+#handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae[Orgn] AND matK[Gene]", idtype="acc")
+handle = Entrez.esearch(db, term,  rettype = "uilist", retmode = "xml", retstart = 0, retmax = 10)
+#esse ratmax é a quantidade de genomas mais parecidos que tem em relação ao de entrada !!IMPORTANTE!!
+
+print("cheguei ate aqui") #breakpoint de boas
+print()
+
+record = Entrez.read(handle) #lendo as infos geradas pela pesquisa
+
+print("{} Genomas mais parecidos com o de entrada".format(record["Count"]))
+print("Aqui estao os IDs dos 10 genomas mais parecidos\n{}".format(record['IdList']))
+
+#nao entendi perfeitamente esse .format mas pelo oq vi funciona +ou- como uma sruct (bem +ou-)
