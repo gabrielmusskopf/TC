@@ -1,0 +1,54 @@
+#   Layout das páginas
+
+<LoginWindow>:
+#Layout da página LoginWindow, chamada de "login"
+    name: "login"
+
+    email: email
+
+    FloatLayout:
+
+        Label:
+            text:"Email: "
+            font_size: (root.width**2 + root.height**2) / 13**4     # Multiplicar para o layout se ajustar com o redimensionamento 
+            pos_hint: {"x":0.12, "top":0.6}
+            size_hint: 0.35, 0.15
+
+        TextInput:
+            id: email   # Nome da caixa de texto - Também é onde fica armazenada a resposta do usuário
+            font_size: (root.width**2 + root.height**2) / 13**4
+            multiline: False
+            pos_hint: {"x": 0.36 , "top":0.59}
+            size_hint: 0.4, 0.10
+
+
+        Button:
+            pos_hint:{"x":0.2,"y":0.2}
+            size_hint: 0.6, 0.2
+            font_size: (root.width**2 + root.height**2) / 13**4
+            text: "Login"
+            on_release:
+               # root.manager.transition.direction = "up"
+                root.loginBtn()
+
+
+<MethodWindow>:
+    name: "method"
+
+    FloatLayout:
+
+        Label:
+            text:"Search: "
+            font_size: (root.width**2 + root.height**2) / 13**4     # Multiplicar para o layout se ajustar com o redimensionamento 
+            pos_hint: {"x":0.12, "top":0.9}
+            size_hint: 0.35, 0.15
+
+        TextInput:
+            id: search   # Nome da caixa de texto - Também é onde fica armazenada a resposta do usuário
+            font_size: (root.width**2 + root.height**2) / 13**4
+            multiline: False
+            pos_hint: {"x": 0.36 , "top":0.7}
+            size_hint: 0.4, 0.10
+
+
+        
