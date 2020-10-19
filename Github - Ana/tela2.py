@@ -17,6 +17,11 @@ if tecla1 == 'P':
     if tecla2 == 'N':
         term = input("Nome/nome cientifico: ")
         #preciso descobrir como retornar o numero de acesso ou GI se a pessoa não souber
+        handle = Entrez.esearch(db = "nucleotide", term,  rettype = "uilist", retmode = "xml", retstart = 0, retmax = 1)
+        record = Entrez.read(handle) #lendo as infos geradas pela pesquisa
+        #print("{} Genomas mais parecidos com o de entrada".format(record["Count"]))
+        #print("Aqui estao os IDs dos 10 genomas mais parecidos\n{}".format(record['IdList']))
+        num = record["Count"]
 
     elif tecla2 == 'n':
         num = input("Numero de acesso/GI: ")
@@ -37,7 +42,6 @@ if tecla4 == 'GO':
     print("{} Genomas mais parecidos com o de entrada".format(record["Count"]))
     print("Aqui estao os IDs dos 10 genomas mais parecidos\n{}".format(record['IdList']))
     print("cheguei aqui 2")
-
 
     result_handle = NCBIWWW.qblast(arg1 = 'blastn', arg2 = 'nt', arg3 = num)
     print("cheguei ate aqui 3")
