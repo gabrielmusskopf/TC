@@ -4,8 +4,13 @@ import Bio
 #   Importar módulo Bio.Entrez 
 #   Módulo para analisar sequências
 #   Módulo para árvores filogenéticas
-from Bio import Entrez, SeqIO, Phylo  
+from Bio import Entrez, SeqIO, AlignIO, Phylo  
+from Bio.Phylo import PhyloXMLIO
+from Bio.Blast import NCBIWWW, NCBIXML
+from Bio.Seq import Seq
 from validate_email import validate_email
+
+from time import gmtime, strftime
 
 from main_v02 import *
 
@@ -27,6 +32,13 @@ def EmailPopUp():
 	pop.setText("Por favor, insira um email válido")
 	pop.setIcon(QMessageBox.Critical)
 	pop.exec_()
+
+
+def LoadingPopUp():
+    pop = QMessageBox()
+    pop.setWindowTitle("Carregando")
+    pop.setText("Carregando alinhamento")
+    pop.exec_()
 	
 
 # Janela de pesquisa de arquivo
@@ -35,12 +47,14 @@ def OpenDialogBox(self,method_ui):
     self.path = self.filename[0]
     method_ui.fileEdit.setText(self.path)
 
-    # print(self.file.read())
+    # print(self.filename.read())
+
+
     if self.path != '':
-        self.file = open(self.path,"r")
-        return self.file.read()
+        record = SeqIO.read(self.path,"fasta")
+        return record.id
     else:
-        return False
+        return "None"
 
     # PopResultLocal(self,self.file.read())
 
@@ -67,13 +81,34 @@ def IsValidSearch(self,method_ui):
         return False
 
 
+
 def Search(self,method_ui,email):
     print("Entrou no Search()")
     Entrez.email = email
 
-    self.handle = Entrez.esearch(db="nucleotide", term = self.method_ui.searchEdit.text(), idtype="acc", retmax = 1) 
+    self.handle = Entrez.esearch(db="nucleotide", term = method_ui.searchEdit.text(), idtype="acc", retmax = 1) 
+    # Retorna um XMLh
     self.record = Entrez.read(self.handle) #lendo as infos geradas pela pesquisa
+    # Converte XML para estrutura de dados python (dicionários)
+
+
+
+
+
+    print(method_ui.searchEdit.text())
+    print(self.handle.url)
+
+
+    # self.result_hande = NCBIWWW.qblast("blastn", "nt",'NG_070885.1', alignments=2)
+
+    # self.save_file = open("xml","w")
+    # self.save_file.write(self.result_hande.read())
+    # self.save_file.close()
+
+
     self.handle.close()
+
+
 
     # print (self.handle.url)
     # print(self.record["Count"])
@@ -85,23 +120,34 @@ def Search(self,method_ui,email):
         print("vai criar um popup pra isso!")
         # popError(self)
 
-
-    # self.tree = Phylo.parse(self.handle, 'phyloxml')
-    # Phylo.draw_ascii(self.tree)
-
+    # WebAlignment(self,method_ui)
 
     return self.record
     # popResultWeb(self)
 
-def Alignment(self,method_ui):
-    # print("Alinhando sequência local")
-    self.method_ui.insertButton.clicked.connect()
+def LocalAlignment(self, id):
+    print("Entrei no LocalAlignment")
+    self.result_hande = NCBIWWW.qblast("blastn", "nt",id, alignments=2)
 
-def ShowPhylo(self,result_ui):
-    # self.result_ui.result_image.setPixmap(QtGui.QPixmap("C:/Users/fabri_000/Documents/_Pesquisas TCC/Bioinformática Python/gui-pyqt5/images/dna.png"))
-    pass
-# Temp
-def ShowPhyloLocal(self,fileHandler):
-#     self.tree = Phylo.parse(fileHandler, 'phyloxml').next()
-#     print(tree)
-    pass
+    self.save_file = open("alignment_result","w")
+    self.save_file.write(self.result_hande.read())
+    self.save_file.close()
+
+    print("Fim do LocalAlignment")
+
+def WebAlignment(self,method_ui):
+    print("Entrei no WebAlignment")
+    print( strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime()) )
+    
+    self.result_hande = NCBIWWW.qblast("blastn", "nt",'NG_070885.1', alignments=2)
+
+    self.save_file = open("xml","w")
+    self.save_file.write(self.result_hande.read())
+    self.save_file.close()
+
+    # Caso não seja salvo em um arquivo, retornar a variável
+    print("Fim do WebAlignment")
+    print( strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime()) )
+
+    def ShowPhylo(self):
+        pass
