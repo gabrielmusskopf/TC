@@ -103,44 +103,46 @@ def IsValidSearch(self,method_ui):
 
 
 def Search(self,method_ui,email):
-    print("Entrou no Search()")
+
+    print("Entrou no Search(): ", datetime.now().hour, ":", datetime.now().minute, ":", datetime.now().second)
     Entrez.email = email
 
-    self.handle = Entrez.esearch(db="nucleotide", term = method_ui.searchEdit.text(), idtype="acc", retmax = 1) 
-    # Retorna um XMLh
-    self.record = Entrez.read(self.handle) #lendo as infos geradas pela pesquisa
-    # Converte XML para estrutura de dados python (dicionários)
+    self.handle = Entrez.esearch(db="nucleotide", term = method_ui.searchEdit.text(), idtype="acc", retmax = 1) # Retorna um XMLh
+    self.record = Entrez.read(self.handle) #lendo as infos geradas pela pesquisa # Converte XML para estrutura de dados python (dicionários)
 
+    # print(self.record)
 
+    print("Passei a pesquisa no Entrez")
+    print("Saí do Search(): ", datetime.now().hour, ":", datetime.now().minute, ":", datetime.now().second)
 
-    print(method_ui.searchEdit.text())
-    print(self.handle.url)
+    return self.record
+    # print(method_ui.searchEdit.text())
+    # print(self.handle.url)
 
 
     # self.result_hande = NCBIWWW.qblast("blastn", "nt",'NG_070885.1', alignments=2)
 
     # with open("entrez_search.xml","w") as save_file:
-    #   self.save_file.write(self.result_hande.read())
+    #     self.save_file.write(self.result_hande.read())
 
 
-    self.handle.close()
+    # self.handle.close()
 
 
+    # # print (self.handle.url)
+    # # print(self.record["Count"])
+    # # print("ID List: ", self.record["IdList"])
+    # # print("Term: ", self.record["TranslationStack"])
 
-    # print (self.handle.url)
-    # print(self.record["Count"])
-    print("ID List: ", self.record["IdList"])
-    # print("Term: ", self.record["TranslationStack"])
+    # if self.record["Count"] == "0" or self.record["IdList"]==[]:
+    #     print ("não encontrado semelhantes")
+    #     print("vai criar um popup pra isso!")
+    #     # popError(self)
 
-    if self.record["Count"] == "0" or self.record["IdList"]==[]:
-        print ("não encontrado semelhantes")
-        print("vai criar um popup pra isso!")
-        # popError(self)
+    # # WebAlignment(self,method_ui)
 
-    # WebAlignment(self,method_ui)
-
-    return self.record
-    # popResultWeb(self)
+    # return self.record
+    # # popResultWeb(self)
 
 def LocalAlignment(self, id):
     print("Entrei no LocalAlignment: ",datetime.now().hour, ":", datetime.now().minute, ":", datetime.now().second)
@@ -159,16 +161,20 @@ def LocalAlignment(self, id):
     return blast_record
 
 
-def WebAlignment(self,method_ui):
-    print("Entrei no WebAlignment:", datetime.now().hour, ":", datetime.now().minute, ":", datetime.now().second)
-    
-    # self.result_hande = NCBIWWW.qblast("blastn", "nt",'NG_070885.1', alignments=2)
+def WebAlignment(self,result_search):
+    # Realiza o alinhamento do método de pesquisa Web
 
-    # self.save_file = open("alignment_result","w")
-    # self.save_file.write(self.result_hande.read())
+    print("Entrei no WebAlignment:", datetime.now().hour, ":", datetime.now().minute, ":", datetime.now().second)
+
+    self.result_hande = NCBIWWW.qblast("blastn", "nt",result_search['IdList'][0], alignments=2)
+
+    self.save_file = open("alignment_result.xml","w")
+    self.save_file.write(self.result_hande.read())
     # print(type(self.save_file))
-    # self.save_file.close()
+    self.save_file.close()
+
     # print(os.getcwd())
+
     self.result_handle = open("alignment_result.xml","r")
     self.blast_record = NCBIXML.read(self.result_handle)
 
@@ -181,16 +187,20 @@ def WebAlignment(self,method_ui):
 Falta trocar de tela quando o alinhamento é local
 '''
 
-def ShowAlignments(self, blast_record):
+def ShowAlignments(self, blast_record, methodScrn):
 
     count = 0
+    maxs = 0
     queryies=[]
     matches=[]
     subjects=[]
+    lengths = []
+
+    # print( int(methodScrn.method_ui.sequencesAskLineEdit_2.text()) )
 
     with open("result.txt",'w') as result_file:
         for alignment in blast_record.alignments:
-            if count<2:
+            if count< int(methodScrn.method_ui.sequencesAskLineEdit_2.text()):
                 for hsp in alignment.hsps:
                     count+=1
                     result_file.write("\n *** Alinhamento *** \n" +
@@ -212,8 +222,22 @@ def ShowAlignments(self, blast_record):
                     matches.append(hsp.match)
                     subjects.append(hsp.sbjct)
 
+                    if alignment.length > maxs:
+                        maxs = alignment.length
 
-    self.result_ui.alignmentScrollFrame.setMinimumSize(QtCore.QSize(1200, count*3000))
+
+        # # Para escrever do mesmo jeito que no BLAST
+        # for s in range(0,len(queryies)):
+        #     for b in range(0,int((len(queryies[s])/60))):
+        #         result_file.write(
+        #             str(b*60) + " " +  str(queryies[b*60:(b+1)*60]) + " " + str((b+1)*60) + "\n" + 
+        #             "   " + str(matches[(b*60)+1:(b+1)*60]) + "\n" +
+        #             str((b*60)) + " " + str(subjects[(b*60)+1:(b+1)*60]) + " " + str((b+1)*60) + "\n")
+
+        #     result_file.write("\n")
+
+
+    self.result_ui.alignmentScrollFrame.setMinimumSize(QtCore.QSize(1200,  1.5*maxs*(count/3) )) #count*15000))  
 
     with open("result.txt","r") as r:
         self.result_ui.alignmentResultLabel.setText(r.read())
@@ -223,7 +247,7 @@ def ShowAlignments(self, blast_record):
 
 
 
-def ShowSites(self,blast_record):
+def ShowSites(self,blast_record, method_ui):
 
     count=0
     queryies=[]
@@ -252,7 +276,7 @@ def ShowSites(self,blast_record):
         # subjects=['ATGGATGCATGCTTGC','GATTGATCGCTCGATC','ATGATAGCTAGTCCT']
         # lengths=[len(queryies[0]),len(queryies[1]),len(queryies[2])]
 
-        print(lengths)
+        # print(lengths)
 
         max = 0;
 
@@ -260,7 +284,7 @@ def ShowSites(self,blast_record):
             if lengths[i] > max:
                 max = lengths[i]
 
-        print(max)
+        # print(max)
 
         self.result_ui.sitesFrame.setMinimumSize(QtCore.QSize(20*max, 1200))
 

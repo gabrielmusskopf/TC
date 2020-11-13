@@ -46,10 +46,11 @@ class Worker(QRunnable):
     '''
     Worker thread
     '''
-    def __init__(self,identifier, handler,*args, **kwargs):
+    def __init__(self,identifier, handler, email,*args, **kwargs):
     	super(Worker,self).__init__()
     	self.identifier = identifier
     	self.handler = handler
+    	self.email = email
     	self.signals = WorkerSignals()
 
     @pyqtSlot()
@@ -66,7 +67,7 @@ class Worker(QRunnable):
 
         elif self.identifier == 1:	# Arquivo web
         	# print("Sou method_ui. Vai para o WebAlignment")
-        	self.resultSearch = Search(self,self.handler,PROVISORY_EMAIL) # Busca no banco de dados
+        	self.resultSearch = Search(self,self.handler,self.email) # Busca no banco de dados
         	
         	if self.resultSearch["IdList"] != []:
         		self.resultAlignment = WebAlignment(self,self.resultSearch) # Realiza o alinhamento dessa busca
@@ -88,16 +89,31 @@ class loginScreen(QMainWindow):
 
 		
 		os.chdir('../images')
-		self.login_ui.movie = QMovie(os.getcwd() + "/virus.gif")
+		self.login_ui.movie = QMovie(os.getcwd() + "/dna02-unscreen.gif")
 		os.chdir('../current_py')
 		self.login_ui.loginLabel_2.setMovie(self.login_ui.movie)
-		self.login_ui.movie.setScaledSize(QSize(200,100))
+		self.login_ui.movie.setScaledSize(QSize(100,100))
 		self.login_ui.movie.start()
 
 
+		# self.login_ui.label = QLabel(self)
+		# os.chdir('../images')
+		# self.login_ui.loginLabel_2.setPixmap(QPixmap(os.getcwd()+'/v2.png'))
+		# os.chdir('../current_py')
+
+		# # self.login_ui.loginLabel_2.setScaledContents(False)
+		# self.login_ui.loginLabel_2.scaled(QSize(200,200))
+
+		# self.login_ui.loginLabel_2.resize(self.login_ui.loginLabel_2.width(), self.login_ui.loginLabel_2.height())
+
+		# self.doAnimation()
+
+
 		# Instância da classe methodScreen
-		# self.mthdScrn = methodScreen(self.login_ui.emailEdit.text())
-		self.mthdScrn = methodScreen(PROVISORY_EMAIL)
+		self.mthdScrn = methodScreen(self.login_ui.emailEdit.text())
+		# print(self.login_ui.emailEdit.text())
+		#
+		# self.mthdScrn = methodScreen(PROVISORY_EMAIL)
 
 		# Quando botão de login for clicado, conecta o SINAL ao SLOT
 		self.login_ui.okButton.clicked.connect(self.checkEmail)
@@ -163,8 +179,8 @@ class methodScreen(QMainWindow):
 	# Handler pode ser 
 	# self.method_ui, caso seja pesquisa web, ou
 	# self.file_return, caso seja arquivo local
-
-		self.ldngScrn.multiTrheadSearch(identifier, handler)
+		# print(self.email)
+		self.ldngScrn.multiTrheadSearch(identifier, handler,self.email)
 
 		# LoadingPopUp()
 
@@ -177,7 +193,7 @@ class loadingScreen(QMainWindow):
 		self.loading_ui.setupUi(self)
 
 		os.chdir('../images')
-		self.loading_ui.movie = QMovie( os.getcwd()+ "/loading_dna02.gif")
+		self.loading_ui.movie = QMovie( os.getcwd()+ "/dna-unscreen.gif")
 		os.chdir('../current_py')
 		self.loading_ui.label_2.setMovie(self.loading_ui.movie)
 		self.loading_ui.movie.setScaledSize(QSize(200,200))
@@ -190,11 +206,11 @@ class loadingScreen(QMainWindow):
 		# print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
 
-	def multiTrheadSearch(self, identifier, handler):
+	def multiTrheadSearch(self, identifier, handler, email):
 
 		print("Entrei multiTrheadSearch")
 
-		worker = Worker(identifier, handler)
+		worker = Worker(identifier, handler, email)
 		worker.signals.result.connect(self.shows)
 		self.threadpool.start(worker)
 
@@ -229,11 +245,11 @@ class resultScreen(QMainWindow):
 		# self.showPhylo()
 
 	def showAlignments(self, blast_record):
-		ShowAlignments(self, blast_record)
+		ShowAlignments(self, blast_record, self.mthdScrn)
 
 
 	def showSites(self,blast_record):
-		ShowSites(self, blast_record)
+		ShowSites(self, blast_record, self.mthdScrn)
 
 
 	def showPhylo(self):

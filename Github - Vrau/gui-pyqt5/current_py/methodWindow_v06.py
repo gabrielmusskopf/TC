@@ -231,6 +231,8 @@ class Ui_MethodWindow(object):
         self.sequencesAskLabel_2.setObjectName("sequencesAskLabel_2")
         self.horizontalLayout_9.addWidget(self.sequencesAskLabel_2)
         self.sequencesAskLineEdit_2 = QtWidgets.QLineEdit(self.sequencesAskFrame_2)
+        self.sequencesAskLineEdit_2.setText("1")
+        self.sequencesAskLineEdit_2.setFont(font)
         self.sequencesAskLineEdit_2.setObjectName("sequencesAskLineEdit_2")
         self.horizontalLayout_9.addWidget(self.sequencesAskLineEdit_2)
         self.gridLayout_2.addWidget(self.sequencesAskFrame_2, 2, 0, 1, 1)
