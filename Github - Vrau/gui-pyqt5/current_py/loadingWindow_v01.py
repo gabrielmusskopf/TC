@@ -9,13 +9,14 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import QMovie
 
 
 class Ui_LoadingWindow(object):
-    def setupUi(self, LoadingWindow):
-        LoadingWindow.setObjectName("LoadingWindow")
-        LoadingWindow.resize(431, 410)
-        self.centralwidget = QtWidgets.QWidget(LoadingWindow)
+    def setupUi(self, MethodWindow):
+        MethodWindow.setObjectName("MethodWindow")
+        MethodWindow.resize(431, 410)
+        self.centralwidget = QtWidgets.QWidget(MethodWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -30,52 +31,57 @@ class Ui_LoadingWindow(object):
         self.frame.setObjectName("frame")
         self.gridLayout = QtWidgets.QGridLayout(self.frame)
         self.gridLayout.setObjectName("gridLayout")
-        self.frame_2 = QtWidgets.QFrame(self.frame)
-        self.frame_2.setMaximumSize(QtCore.QSize(300, 200))
-        self.frame_2.setStyleSheet("QFrame{\n"
+        self.loadingFrame = QtWidgets.QFrame(self.frame)
+        self.loadingFrame.setMaximumSize(QtCore.QSize(300, 200))
+        self.loadingFrame.setStyleSheet("QFrame{\n"
 "background-color: rgb(40,40,40);\n"
 "}")
-        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_2.setObjectName("frame_2")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frame_2)
+        self.loadingFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.loadingFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.loadingFrame.setObjectName("loadingFrame")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.loadingFrame)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.label = QtWidgets.QLabel(self.frame_2)
-        self.label.setMaximumSize(QtCore.QSize(16777215, 50))
+        self.titleLabel = QtWidgets.QLabel(self.loadingFrame)
+        self.titleLabel.setMaximumSize(QtCore.QSize(16777215, 50))
         font = QtGui.QFont()
         font.setPointSize(20)
-        self.label.setFont(font)
-        self.label.setStyleSheet("color: rgb(255, 255, 255);")
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.label.setObjectName("label")
-        self.verticalLayout_2.addWidget(self.label)
-        self.photo = QtWidgets.QLabel(self.frame_2)
+        self.titleLabel.setFont(font)
+        self.titleLabel.setStyleSheet("color: rgb(255, 255, 255);")
+        self.titleLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.titleLabel.setObjectName("titleLabel")
+        self.verticalLayout_2.addWidget(self.titleLabel)
+        self.label_2 = QtWidgets.QLabel(self.loadingFrame)
         font = QtGui.QFont()
         font.setPointSize(20)
-        self.photo.setFont(font)
-        self.photo.setStyleSheet("color: rgb(255, 255, 255);")
-        self.photo.setPixmap(QtGui.QPixmap("../../images/dna03.png"))
-        self.photo.setAlignment(QtCore.Qt.AlignCenter)
-        self.photo.setObjectName("photo")
-        self.verticalLayout_2.addWidget(self.photo)
-        self.gridLayout.addWidget(self.frame_2, 0, 0, 1, 1)
+        self.label_2.setFont(font)
+        self.label_2.setStyleSheet("color: rgb(255, 255, 255);")
+        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_2.setObjectName("label_2")
+
+        # self.movie = QMovie("C:/Users/fabri_000/Documents/_Pesquisas TCC/Bioinformática Python/gui-pyqt5/images/loading_dna02.gif")
+        # self.movie.setScaledSize(2)
+        # self.label_2.setMovie(self.movie)
+        # self.movie.start()
+
+        self.verticalLayout_2.addWidget(self.label_2)
+        self.gridLayout.addWidget(self.loadingFrame, 0, 0, 1, 1)
         self.verticalLayout.addWidget(self.frame)
-        LoadingWindow.setCentralWidget(self.centralwidget)
+        MethodWindow.setCentralWidget(self.centralwidget)
 
-        self.retranslateUi(LoadingWindow)
-        QtCore.QMetaObject.connectSlotsByName(LoadingWindow)
+        self.retranslateUi(MethodWindow)
+        QtCore.QMetaObject.connectSlotsByName(MethodWindow)
 
-    def retranslateUi(self, LoadingWindow):
+    def retranslateUi(self, MethodWindow):
         _translate = QtCore.QCoreApplication.translate
-        LoadingWindow.setWindowTitle(_translate("LoadingWindow", "MainWindow"))
-        self.label.setText(_translate("LoadingWindow", "Carregando"))
+        MethodWindow.setWindowTitle(_translate("MethodWindow", "MainWindow"))
+        self.titleLabel.setText(_translate("MethodWindow", "Carregando"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    LoadingWindow = QtWidgets.QMainWindow()
-    ui = Ui_LoadingWindow()
-    ui.setupUi(LoadingWindow)
-    LoadingWindow.show()
+    MethodWindow = QtWidgets.QMainWindow()
+    ui = Ui_MethodWindow()
+    ui.setupUi(MethodWindow)
+    MethodWindow.show()
     sys.exit(app.exec_())

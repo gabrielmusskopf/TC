@@ -107,17 +107,30 @@ background-color: rgb(40,40,40);
               <string>Árvore Filogenética</string>
              </attribute>
              <layout class="QGridLayout" name="gridLayout_2">
-              <item row="0" column="0">
-               <widget class="QLabel" name="resultTree">
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="2">
+              <item row="0" column="1">
                <widget class="QScrollBar" name="verticalScrollBar">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="resultText">
+                <property name="font">
+                 <font>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QLabel{
+color: rgb(255,255,255);
+}</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
                 </property>
                </widget>
               </item>

@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>482</width>
-    <height>447</height>
+    <width>478</width>
+    <height>455</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -52,7 +52,7 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QFrame" name="login_2">
+        <widget class="QFrame" name="login_2_Frame">
          <property name="maximumSize">
           <size>
            <width>250</width>
@@ -73,7 +73,7 @@ border-radius: 4px;</string>
           <property name="geometry">
            <rect>
             <x>40</x>
-            <y>135</y>
+            <y>180</y>
             <width>170</width>
             <height>30</height>
            </rect>
@@ -105,7 +105,7 @@ QLineEdit:focus{
           <property name="geometry">
            <rect>
             <x>60</x>
-            <y>180</y>
+            <y>230</y>
             <width>120</width>
             <height>20</height>
            </rect>
@@ -137,7 +137,7 @@ QPushButton:focus{
           <property name="geometry">
            <rect>
             <x>60</x>
-            <y>60</y>
+            <y>100</y>
             <width>131</width>
             <height>51</height>
            </rect>
@@ -157,6 +157,19 @@ QPushButton:focus{
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+         <widget class="QLabel" name="loginLabel_2">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>10</y>
+            <width>211</width>
+            <height>91</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string/>
           </property>
          </widget>
         </widget>

@@ -15,7 +15,7 @@ class Ui_LoginWindow(object):
     def setupUi(self, LoginWindow):
         LoginWindow.setObjectName("LoginWindow")
         LoginWindow.setEnabled(True)
-        LoginWindow.resize(482, 447)
+        LoginWindow.resize(478, 455)
         LoginWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         LoginWindow.setWindowTitle("")
         LoginWindow.setStyleSheet("")
@@ -31,15 +31,15 @@ class Ui_LoginWindow(object):
         self.login.setObjectName("login")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.login)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.login_2 = QtWidgets.QFrame(self.login)
-        self.login_2.setMaximumSize(QtCore.QSize(250, 300))
-        self.login_2.setStyleSheet("background-color: rgb(30, 30, 30);\n"
+        self.login_2_Frame = QtWidgets.QFrame(self.login)
+        self.login_2_Frame.setMaximumSize(QtCore.QSize(250, 300))
+        self.login_2_Frame.setStyleSheet("background-color: rgb(30, 30, 30);\n"
 "border-radius: 4px;")
-        self.login_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.login_2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.login_2.setObjectName("login_2")
-        self.emailEdit = QtWidgets.QLineEdit(self.login_2)
-        self.emailEdit.setGeometry(QtCore.QRect(40, 135, 170, 30))
+        self.login_2_Frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.login_2_Frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.login_2_Frame.setObjectName("login_2_Frame")
+        self.emailEdit = QtWidgets.QLineEdit(self.login_2_Frame)
+        self.emailEdit.setGeometry(QtCore.QRect(40, 180, 170, 30))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.emailEdit.setFont(font)
@@ -56,8 +56,8 @@ class Ui_LoginWindow(object):
 "    color: rgb(244, 244, 244);\n"
 "}")
         self.emailEdit.setObjectName("emailEdit")
-        self.okButton = QtWidgets.QPushButton(self.login_2)
-        self.okButton.setGeometry(QtCore.QRect(60, 180, 120, 20))
+        self.okButton = QtWidgets.QPushButton(self.login_2_Frame)
+        self.okButton.setGeometry(QtCore.QRect(60, 230, 120, 20))
         self.okButton.setStyleSheet("QPushButton{\n"
 "    border-radius: 3px;\n"
 "    background-color: rgb(57, 57, 57);\n"
@@ -76,8 +76,8 @@ class Ui_LoginWindow(object):
 "}\n"
 "")
         self.okButton.setObjectName("okButton")
-        self.loginLabel = QtWidgets.QLabel(self.login_2)
-        self.loginLabel.setGeometry(QtCore.QRect(60, 60, 131, 51))
+        self.loginLabel = QtWidgets.QLabel(self.login_2_Frame)
+        self.loginLabel.setGeometry(QtCore.QRect(60, 100, 131, 51))
         font = QtGui.QFont()
         font.setFamily("Harlow Solid Italic")
         font.setPointSize(28)
@@ -86,7 +86,11 @@ class Ui_LoginWindow(object):
         self.loginLabel.setStyleSheet("color: rgb(85, 255, 255);")
         self.loginLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.loginLabel.setObjectName("loginLabel")
-        self.horizontalLayout_2.addWidget(self.login_2)
+        self.loginLabel_2 = QtWidgets.QLabel(self.login_2_Frame)
+        self.loginLabel_2.setGeometry(QtCore.QRect(20, 10, 211, 91))
+        self.loginLabel_2.setText("")
+        self.loginLabel_2.setObjectName("loginLabel_2")
+        self.horizontalLayout_2.addWidget(self.login_2_Frame)
         self.horizontalLayout.addWidget(self.login)
         LoginWindow.setCentralWidget(self.centralwidget)
 

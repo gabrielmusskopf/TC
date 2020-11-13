@@ -6,12 +6,12 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 from validate_email import validate_email
-import time
+
 
 from loginWindow_v04 import *
 from methodWindow_v06 import *
 from loadingWindow_v01 import *
-from resultWindow_v03 import *
+from resultWindow_v05 import *
 from methods import *
 
 
@@ -52,11 +52,8 @@ class Worker(QRunnable):
     	self.handler = handler
     	self.signals = WorkerSignals()
 
-
-
     @pyqtSlot()
     def run(self):
-
     # Se handler for method_ui -> Pesquisa no Entrez
         print("Thread start")
         # print(type(self.handler))
@@ -64,24 +61,20 @@ class Worker(QRunnable):
 
         if self.identifier == 0: # Arquivo local
         	# print('Sou tipo str. Vai para o LocalAlignment')
-        	LocalAlignment(self,self.handler)
+        	self.resultAlignment = LocalAlignment(self,self.handler)
         	
 
         elif self.identifier == 1:	# Arquivo web
         	# print("Sou method_ui. Vai para o WebAlignment")
         	self.resultSearch = Search(self,self.handler,PROVISORY_EMAIL) # Busca no banco de dados
-        	WebAlignment(self,self.resultSearch) # Realiza o alinhamento dessa busca
-        	print(self.resultSearch["IdList"])
+        	
+        	if self.resultSearch["IdList"] != []:
+        		self.resultAlignment = WebAlignment(self,self.resultSearch) # Realiza o alinhamento dessa busca
 
-        	self.signals.result.emit(self.resultSearch)
-
+        
+        self.signals.result.emit(self.resultAlignment)
 
         print("Thread complete")
-
-    #     self.tst()
-
-    # def searchLocalThread(self):
-    # 	print("Entrei tst()")
 
 
 
@@ -90,8 +83,15 @@ class loginScreen(QMainWindow):
 		super().__init__()
 		self.login_ui = Ui_LoginWindow()
 		self.login_ui.setupUi(self)
-		# Instância da classe methodScreen
 
+
+		self.login_ui.movie = QMovie("C:/Users/fabri_000/Documents/_Pesquisas TCC/Bioinformática Python/gui-pyqt5/images/virus.gif")
+		self.login_ui.loginLabel_2.setMovie(self.login_ui.movie)
+		self.login_ui.movie.setScaledSize(QSize(200,100))
+		self.login_ui.movie.start()
+
+
+		# Instância da classe methodScreen
 		# self.mthdScrn = methodScreen(self.login_ui.emailEdit.text())
 		self.mthdScrn = methodScreen(PROVISORY_EMAIL)
 
@@ -147,22 +147,14 @@ class methodScreen(QMainWindow):
 		# Função para fazer o alinhameto 
 
 
+
 	def isValidSearch(self):
+		# Verifica se a pesquisa é válida
+		# Se é, envia o identificador '1' para indicar uma pesquisa na WEB
 		self.valid=IsValidSearch(self,self.method_ui)
 		if self.valid:
 			self.methodToLoadingScreen()
 			self.backgroundSearch(1,self.method_ui)
-
-			# worker = Worker(self.method_ui)
-			# worker.signals.result.connect(self.print_output)
-			# self.threadpool.start(worker)
-
-
-	# def print_output(self, s):
- #   		print(s)
-
- #   		if s["IdList"] != []:
- #   			self.ldngScrn.loadingToResultWindow()
 
 
 	def methodToLoadingScreen(self):
@@ -182,15 +174,18 @@ class methodScreen(QMainWindow):
 
 
 
-
-
 class loadingScreen(QMainWindow):
 	def __init__(self,methodObject):
 		super().__init__()
 		self.loading_ui = Ui_LoadingWindow()
 		self.loading_ui.setupUi(self)
 
-		# self.mthd = methodObject
+		self.loading_ui.movie = QMovie("C:/Users/fabri_000/Documents/_Pesquisas TCC/Bioinformática Python/gui-pyqt5/images/loading_dna02.gif")
+		self.loading_ui.label_2.setMovie(self.loading_ui.movie)
+		self.loading_ui.movie.setScaledSize(QSize(200,200))
+		self.loading_ui.movie.start()
+
+
 		self.rsltScrn = resultScreen(methodObject)
 
 		self.threadpool = QThreadPool()
@@ -202,45 +197,56 @@ class loadingScreen(QMainWindow):
 		print("Entrei multiTrheadSearch")
 
 		worker = Worker(identifier, handler)
-		# worker.tst()
-		worker.signals.result.connect(self.print_output)
+		worker.signals.result.connect(self.shows)
 		self.threadpool.start(worker)
 
 
-	def print_output(self, s):
-   		print(s)
-
-   		if s["IdList"] != []:
-   			self.loadingToResultWindow()
+	def shows(self, blast_record):
+   		# print(blast_record)
+   		# ShowAlignments(self, blast_record, self.rsltScrn)
+   		print(blast_record)
+   		self.rsltScrn.showAlignments(blast_record)
+   		self.rsltScrn.showSites(blast_record)
+   		self.loadingToResultWindow()
 
 
 	def loadingToResultWindow(self):
 		# print("Ta no resultado, dale!")
 		self.close()
 		self.rsltScrn.show()
+		self.rsltScrn.showPhylo()
 
 
 
 class resultScreen(QMainWindow):
 	def __init__(self,methodObject):
 		super().__init__()
+
 		self.mthdScrn = methodObject
 
 		self.result_ui = Ui_ResultWindow()
 		self.result_ui.setupUi(self)
 
 		# self.result_ui.resultTree.setText("Texto")
-		# self.result_ui.resultTree.setPixmap(QtGui.QPixmap("C:/Usersfabri_000/Documents/_Pesquisas TCC/Bioinformática Python/gui-pyqt5/images/dna.png"))
+		# self.result_ui.resultTree.setPixmap(QtGui.QPixmap("C:/Users/fabri_000/Documents/_Pesquisas TCC/Bioinformática Python/gui-pyqt5/images/loading_dna.gif"))
 		
 		# self.mthd = methodScreen("gabrielgmusskopf@gmail.com")
 		# self.jorge = loginScreen()
 
 		self.result_ui.returnButton.clicked.connect(self.returnToMethod)
-		self.showPhylo()
+		# self.showPhylo()
+
+	def showAlignments(self, blast_record):
+		ShowAlignments(self, blast_record)
+
+
+	def showSites(self,blast_record):
+		ShowSites(self, blast_record)
+
 
 	def showPhylo(self):
-		# ShowPhylo(self,self.result_ui)
-		pass
+		ShowPhylo(self,self.result_ui)
+	
 
 	def returnToMethod(self):
 		print("Retona ai mano!")
