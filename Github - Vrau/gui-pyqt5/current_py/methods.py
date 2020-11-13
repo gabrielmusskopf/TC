@@ -68,14 +68,16 @@ def OpenDialogBox(self,method_ui):
 # Vai ser substuído pela próxima janela
 def PopMultipleMethods(self):
     pop = QMessageBox()
-    pop.setWindowTitle("Mais de um método de pesquisa selecionado")
-    pop.setIcon(QMessageBox.Information)
+    pop.setWindowTitle("Erro")
+    pop.setText("Mais de um método selecionado")
+    pop.setIcon(QMessageBox.Critical)
     pop.exec_()
 
 
 def PopSearchError(self):
     pop = QMessageBox()
     pop.setWindowTitle("Erro")
+    pop.setText("Erro na pesquisa")
     pop.setIcon(QMessageBox.Critical)
     pop.exec_()
 
@@ -86,19 +88,21 @@ def IsValidSearch(self,method_ui):
     if (self.method_ui.searchEdit.text() != "" or self.method_ui.insertEdit.text() != ""):
         if (self.method_ui.searchEdit.text() != "" and self.method_ui.insertEdit.text() == ""): # Se for web
             print("Pesquisa Valida - WEB")
-            ans = [True,1]
+            ans = [1,1]
             return ans
         elif (self.method_ui.searchEdit.text() == "" and self.method_ui.insertEdit.text() != ""): # Se for local
             print("Pesquisa Valida - Local")
-            ans = [True,0]
+            ans = [1,0]
             return ans
         elif (self.method_ui.searchEdit.text() != "" and self.method_ui.insertEdit.text() != ""): # Dois métodos selecionados
             PopMultipleMethods(self)
-            return False
+            ans = [0,0]
+            return ans
     else:
         # print('Pesquisa não válida')
+        ans = [0,0]
         PopSearchError(self)
-        return False
+        return ans
 
 
 
@@ -154,7 +158,8 @@ def LocalAlignment(self, id):
     #     save_file.write(result_handle.read())
     #     result_handle.close()
 
-    result_handle = open("alignment_result.xml","r")
+    # result_handle = open("alignment_result.xml","r")
+    result_handle = open("alignment_result_test.xml","r")
     blast_record = NCBIXML.read(result_handle)
 
     print("Fim do LocalAlignment: ", datetime.now().hour, ":", datetime.now().minute, ":", datetime.now().second)
@@ -166,16 +171,17 @@ def WebAlignment(self,result_search):
 
     print("Entrei no WebAlignment:", datetime.now().hour, ":", datetime.now().minute, ":", datetime.now().second)
 
-    self.result_hande = NCBIWWW.qblast("blastn", "nt",result_search['IdList'][0], alignments=2)
+    # self.result_hande = NCBIWWW.qblast("blastn", "nt",result_search['IdList'][0], alignments=2)
 
-    self.save_file = open("alignment_result.xml","w")
-    self.save_file.write(self.result_hande.read())
-    # print(type(self.save_file))
-    self.save_file.close()
+    # self.save_file = open("alignment_result.xml","w")
+    # self.save_file.write(self.result_hande.read())
+    # # print(type(self.save_file))
+    # self.save_file.close()
 
-    # print(os.getcwd())
+    # # print(os.getcwd())
 
-    self.result_handle = open("alignment_result.xml","r")
+    # self.result_handle = open("alignment_result_test.xml","r")
+    self.result_handle = open("alignment_result_test.xml","r")
     self.blast_record = NCBIXML.read(self.result_handle)
 
     # Caso não seja salvo em um arquivo, retornar a variável
@@ -247,7 +253,7 @@ def ShowAlignments(self, blast_record, methodScrn):
 
 
 
-def ShowSites(self,blast_record, method_ui):
+def ShowSites(self,blast_record, methodScrn):
 
     count=0
     queryies=[]
@@ -260,7 +266,7 @@ def ShowSites(self,blast_record, method_ui):
         result_file.write("\n *** Sítios *** \n\n")
 
         for alignment in blast_record.alignments:
-            if count<10:
+            if count< int(methodScrn.method_ui.sequencesAskLineEdit_2.text()):
                 for hsp in alignment.hsps:
                     count+=1
                     # self.result_ui.sitesFrame.setMinimumSize(QtCore.QSize(12*alignment.length, 1200))

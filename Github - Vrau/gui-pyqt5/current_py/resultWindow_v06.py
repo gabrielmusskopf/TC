@@ -220,7 +220,7 @@ class Ui_ResultWindow(object):
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.alignmentResultLabel = QtWidgets.QLabel(self.alignmentScrollFrame)
         font = QtGui.QFont()
-        font.setFamily("Bahnschrift SemiBold")
+        font.setFamily("Consolas")
         font.setPointSize(11)
         font.setBold(False)
         font.setItalic(False)
@@ -327,6 +327,7 @@ class Ui_ResultWindow(object):
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.sitesResultLabel = QtWidgets.QLabel(self.sitesFrame)
         font = QtGui.QFont()
+        font.setFamily("Consolas")
         font.setPointSize(11)
         self.sitesResultLabel.setFont(font)
         self.sitesResultLabel.setStyleSheet("QLabel{\n"

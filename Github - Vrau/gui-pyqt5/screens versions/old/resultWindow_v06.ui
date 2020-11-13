@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>798</width>
-    <height>570</height>
+    <width>954</width>
+    <height>578</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -131,7 +131,10 @@ background-color: rgb(76,76,76);
            <widget class="QTabWidget" name="tabWidget">
             <property name="font">
              <font>
+              <family>Bahnschrift SemiBold</family>
               <pointsize>10</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="styleSheet">
@@ -340,7 +343,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                       <widget class="QLabel" name="alignmentResultLabel">
                        <property name="font">
                         <font>
-                         <family>Bahnschrift SemiBold</family>
+                         <family>Consolas</family>
                          <pointsize>11</pointsize>
                          <weight>7</weight>
                          <italic>false</italic>
@@ -350,7 +353,6 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                        <property name="styleSheet">
                         <string notr="true">/* Result Label */
 QLabel{
-	font: 63 11pt &quot;Bahnschrift SemiBold&quot;;
 	color: rgb(255, 255, 255);
 	background-color: rgb(40, 40, 40);
 	border-radius: 5px;
@@ -543,6 +545,14 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
               <width>16777215</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Bahnschrift SemiBold</family>
+              <pointsize>11</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton{

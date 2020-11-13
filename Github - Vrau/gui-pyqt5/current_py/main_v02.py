@@ -160,13 +160,14 @@ class methodScreen(QMainWindow):
 		# 0 = Local / 1 = Web
 
 		self.valid=IsValidSearch(self,self.method_ui)	# Retorna um objeto com [Pesquisa Válida, Método de pesquisa]
-		if self.valid[0] == True:
+		if self.valid[0] == 1:
 			self.methodToLoadingScreen()
 			if self.valid[1] == 1:
 				self.backgroundSearch(1,self.method_ui)
 			elif self.valid[1] == 0:
 
 				self.backgroundSearch(0,self.method_ui)	
+
 
 
 	def methodToLoadingScreen(self):
@@ -258,6 +259,9 @@ class resultScreen(QMainWindow):
 
 	def returnToMethod(self):
 		print("Retona ai mano!")
+		self.mthdScrn.method_ui.searchEdit.setText('')
+		self.mthdScrn.method_ui.insertEdit.setText('')
+		self.mthdScrn.method_ui.sequencesAskLineEdit_2.setText('1')
 		self.mthdScrn.show()
 		self.close()
 		
