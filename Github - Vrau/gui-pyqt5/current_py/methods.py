@@ -51,7 +51,7 @@ def OpenDialogBox(self,method_ui):
     # options |= QFileDialog.DontUseNativeDialog
     self.filename = QFileDialog.getOpenFileName(filter="Fasta files (*.fasta)", options=options)
     self.path = self.filename[0]
-    method_ui.fileEdit.setText(self.path)
+    method_ui.insertEdit.setText(self.path)
 
     # print(self.filename.read())
 
@@ -66,24 +66,38 @@ def OpenDialogBox(self,method_ui):
 
 # Temporário
 # Vai ser substuído pela próxima janela
-def PopResultLocal(self,handler):
+def PopMultipleMethods(self):
     pop = QMessageBox()
-    pop.setWindowTitle("Resuldados")
-    pop.setText(handler)
+    pop.setWindowTitle("Mais de um método de pesquisa selecionado")
     pop.setIcon(QMessageBox.Information)
+    pop.exec_()
+
+
+def PopSearchError(self):
+    pop = QMessageBox()
+    pop.setWindowTitle("Erro")
+    pop.setIcon(QMessageBox.Critical)
     pop.exec_()
 
 
 def IsValidSearch(self,method_ui):
     # Verifica se o texto é válido
-
-    if self.method_ui.searchEdit.text() != "":
-        # print (self.searchEdit.text())
-        # search(self,method_ui)
-        print("Pesquisa Valida")
-        return True
+    ans = []
+    if (self.method_ui.searchEdit.text() != "" or self.method_ui.insertEdit.text() != ""):
+        if (self.method_ui.searchEdit.text() != "" and self.method_ui.insertEdit.text() == ""): # Se for web
+            print("Pesquisa Valida - WEB")
+            ans = [True,1]
+            return ans
+        elif (self.method_ui.searchEdit.text() == "" and self.method_ui.insertEdit.text() != ""): # Se for local
+            print("Pesquisa Valida - Local")
+            ans = [True,0]
+            return ans
+        elif (self.method_ui.searchEdit.text() != "" and self.method_ui.insertEdit.text() != ""): # Dois métodos selecionados
+            PopMultipleMethods(self)
+            return False
     else:
-        print('Pesquisa não válida')
+        # print('Pesquisa não válida')
+        PopSearchError(self)
         return False
 
 
@@ -154,7 +168,7 @@ def WebAlignment(self,method_ui):
     # self.save_file.write(self.result_hande.read())
     # print(type(self.save_file))
     # self.save_file.close()
-
+    # print(os.getcwd())
     self.result_handle = open("alignment_result.xml","r")
     self.blast_record = NCBIXML.read(self.result_handle)
 
@@ -176,36 +190,34 @@ def ShowAlignments(self, blast_record):
 
     with open("result.txt",'w') as result_file:
         for alignment in blast_record.alignments:
-            if count<3:
+            if count<2:
                 for hsp in alignment.hsps:
                     count+=1
-                    result_file.write("\n ***Alignment*** \n" +
-                    "Sequence: " + str(alignment.title) + "\n" + 
-                    "Length: "+ str(alignment.length) + "\n"+
-                    "Nums of differents bases: "+str(hamming(hsp.query,hsp.sbjct))+"\n"+
-                     str(hsp.query[0:75])+"..." + "\n" +
-                     str(hsp.match[0:75]) + "..." + "\n" +
-                     str(hsp.sbjct[0:75]) + "..." +"\n")
+                    result_file.write("\n *** Alinhamento *** \n" +
+                    "Sequência: " + str(alignment.title) + "\n" + 
+                    # "ID: " + str(hsp.id) + "\n" +
+                    "Comprimento: "+ str(alignment.length) + "\n"+
+                    "Número de bases diferentes: "+str(hsp.gaps)+"\n")
 
-                    #print('Alinhamento '+str(i)) #printa número do alinhamento
-                    #print('Sequencia:'+a.title) #informações sobre a sequência
-                    #print('Tamanho:',a.length)  #pares de base
-                    #print('Score:',hsp.score)   #quanto teve de cobertura
-                    #print('Gaps:',hsp.gaps)     #quantos indels (deleção,inserção)
+                    # Para escrever do mesmo jeito que no BLAST
+                    for b in range(0,int((len(hsp.query)/60))):
+                        result_file.write(
+                            str(b*60) + " " +  str(hsp.query[b*60:(b+1)*60]) + " " + str((b+1)*60) + "\n" + 
+                            "   " + str(hsp.match[(b*60)+1:(b+1)*60]) + "\n" +
+                            str((b*60)) + " " + str(hsp.sbjct[(b*60)+1:(b+1)*60]) + " " + str((b+1)*60) + "\n")
+
+                    result_file.write("\n")
+
                     queryies.append(hsp.query)
                     matches.append(hsp.match)
                     subjects.append(hsp.sbjct)
 
-        # mat = 0
-        # for i in range(0,len(matches)):
-        #     for c in range(0,len(matches[i])):
-        #         if matches[i][c] == ' ':
-        #             mat+=1
-        # print(mat)
+
+    self.result_ui.alignmentScrollFrame.setMinimumSize(QtCore.QSize(1200, count*3000))
 
     with open("result.txt","r") as r:
-        # print(r.read())
         self.result_ui.alignmentResultLabel.setText(r.read())
+
 
     print("\n" + "Tem ",count,"sequências na saída do Blast")
 
@@ -221,13 +233,13 @@ def ShowSites(self,blast_record):
     leng = 0
 
     with open("sites_result.txt",'w') as result_file:
-        result_file.write("\n ***Sites*** \n")
+        result_file.write("\n *** Sítios *** \n\n")
 
         for alignment in blast_record.alignments:
-            if count<3:
+            if count<10:
                 for hsp in alignment.hsps:
                     count+=1
-                    self.result_ui.sitesFrame.setMinimumSize(QtCore.QSize(10*alignment.length, 1200))
+                    # self.result_ui.sitesFrame.setMinimumSize(QtCore.QSize(12*alignment.length, 1200))
                     # result_file.write( str(hsp.query) + "\t" +"\n")
                     # result_file.write( str(hsp.match) + "\t" +"\n")
                     queryies.append(hsp.query)
@@ -236,33 +248,62 @@ def ShowSites(self,blast_record):
                     lengths.append(alignment.length)
                     leng += alignment.length 
 
-        # for i in range(0,len(queryies)):
-        result_file.write( str(queryies[0])+"\n")
+        # queryies=['ATGCATGCATGCATGC','GATCGATCGATCGATC','ATGCTAGCTAGTCAT']
+        # subjects=['ATGGATGCATGCTTGC','GATTGATCGCTCGATC','ATGATAGCTAGTCCT']
+        # lengths=[len(queryies[0]),len(queryies[1]),len(queryies[2])]
 
-        for c in range(0,len(matches[0])):
-            result_file.write(str( matches[0][c] ) + " ")
+        print(lengths)
 
-        # for i in range(0,len(subjects)):
-        result_file.write( str(subjects[0])+"\n")
+        max = 0;
+
+        for i in range(0,len(lengths)):
+            if lengths[i] > max:
+                max = lengths[i]
+
+        print(max)
+
+        self.result_ui.sitesFrame.setMinimumSize(QtCore.QSize(20*max, 1200))
+
+        # Escreve a sequência referência (o for é para percorrer os nuceotídeos e dar um espaco depois de mostrar cada um)
+        result_file.write("Query:\t\t")
+        for c in range(0,len(queryies[0])):
+            result_file.write(str(queryies[0][c]) + " ")
+        result_file.write("\n")
+
+
+
+        # Escreve os subjects (um para cada elemento do)
+        for i in range(0,len(subjects)):    # Percorre os indices de subjects
+            result_file.write("Subject "+ str(i) +":\t")
+            for c in range(0,len(subjects[i])): # Percorre as bases de cada subject
+                if queryies[0][c] == subjects[i][c]:
+                    result_file.write( str(subjects[i][c]) + " ")
+                else:   # Mutação
+                        # Falta um jeito de marcar a letra sem que fique desalinhado
+                        # Se trocar de cor, troca de todas outras letrar na label
+                    result_file.write(str(subjects[i][c]) + "! ")
+
+            result_file.write("\n")
 
 
     with open("sites_result.txt","r") as r:
         self.result_ui.sitesResultLabel.setText(r.read())
 
 
-    wdir = os.getcwd()
-    print(wdir)
+    # Para árvore filogenética
+    # wdir = os.getcwd()
+    # print(wdir)
 
-    in_file = "sites_result.txt"
-    out_file = "alignment_general.fasta"
+    # in_file = "sites_result.txt"
+    # out_file = "alignment_general.fasta"
 
-    clustalomega_cline = ClustalOmegaCommandline(infile = in_file, outfile = out_file, verbose = True, auto = False)
-    print(clustalomega_cline)
+    # clustalomega_cline = ClustalOmegaCommandline(infile = in_file, outfile = out_file, verbose = True, auto = False)
+    # print(clustalomega_cline)
 
-    path = "r'" + str(wdir)
-    input_comand = '"' + wdir + '/clustal-omega-1.2.2-win64/' + str(clustalomega_cline)[0:8] + '" ' + str(clustalomega_cline)
-    print(input_comand)
-    os.system(input_comand)
+    # path = "r'" + str(wdir)
+    # input_comand = '"' + wdir + '/clustal-omega-1.2.2-win64/' + str(clustalomega_cline)[0:8] + '" ' + str(clustalomega_cline)
+    # print(input_comand)
+    # os.system(input_comand)
 
 
 
@@ -273,6 +314,7 @@ def ShowSites(self,blast_record):
 
     
     # print(sequences[0][0])
+
 
 
 def hamming(d1, d2):

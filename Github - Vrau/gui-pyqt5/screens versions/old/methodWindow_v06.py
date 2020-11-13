@@ -196,18 +196,18 @@ class Ui_MethodWindow(object):
         self.searchLabel_2.setObjectName("searchLabel_2")
         self.horizontalLayout_8.addWidget(self.searchLabel_2)
         self.gridLayout_2.addWidget(self.webSearchTitleFrame, 0, 0, 1, 1)
-        self.searchEdit = QtWidgets.QLineEdit(self.webFrame)
-        self.searchEdit.setMinimumSize(QtCore.QSize(0, 160))
-        self.searchEdit.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.searchEdit_2 = QtWidgets.QLineEdit(self.webFrame)
+        self.searchEdit_2.setMinimumSize(QtCore.QSize(0, 160))
+        self.searchEdit_2.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
         font.setPointSize(20)
-        self.searchEdit.setFont(font)
-        self.searchEdit.setStyleSheet("QLineEdit{\n"
+        self.searchEdit_2.setFont(font)
+        self.searchEdit_2.setStyleSheet("QLineEdit{\n"
 "border-radius: 3px;\n"
 "}")
-        self.searchEdit.setText("")
-        self.searchEdit.setObjectName("searchEdit")
-        self.gridLayout_2.addWidget(self.searchEdit, 1, 0, 1, 1)
+        self.searchEdit_2.setText("")
+        self.searchEdit_2.setObjectName("searchEdit_2")
+        self.gridLayout_2.addWidget(self.searchEdit_2, 1, 0, 1, 1)
         self.sequencesAskFrame_2 = QtWidgets.QFrame(self.webFrame)
         self.sequencesAskFrame_2.setMaximumSize(QtCore.QSize(16777215, 100))
         self.sequencesAskFrame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -267,19 +267,19 @@ class Ui_MethodWindow(object):
         self.searchLabel_3.setObjectName("searchLabel_3")
         self.gridLayout_4.addWidget(self.searchLabel_3, 0, 0, 1, 1)
         self.gridLayout_3.addWidget(self.frame_10, 0, 0, 1, 2)
-        self.insertEdit = QtWidgets.QLineEdit(self.fileFrame)
-        self.insertEdit.setMinimumSize(QtCore.QSize(0, 30))
-        self.insertEdit.setMaximumSize(QtCore.QSize(500, 16777215))
-        self.insertEdit.setObjectName("insertEdit")
-        self.gridLayout_3.addWidget(self.insertEdit, 1, 0, 1, 1)
-        self.insertButton = QtWidgets.QPushButton(self.fileFrame)
-        self.insertButton.setMinimumSize(QtCore.QSize(0, 30))
-        self.insertButton.setMaximumSize(QtCore.QSize(100, 16777215))
+        self.fileEdit = QtWidgets.QLineEdit(self.fileFrame)
+        self.fileEdit.setMinimumSize(QtCore.QSize(0, 30))
+        self.fileEdit.setMaximumSize(QtCore.QSize(500, 16777215))
+        self.fileEdit.setObjectName("fileEdit")
+        self.gridLayout_3.addWidget(self.fileEdit, 1, 0, 1, 1)
+        self.fileButton = QtWidgets.QPushButton(self.fileFrame)
+        self.fileButton.setMinimumSize(QtCore.QSize(0, 30))
+        self.fileButton.setMaximumSize(QtCore.QSize(100, 16777215))
         font = QtGui.QFont()
         font.setFamily("Bahnschrift SemiBold")
         font.setPointSize(12)
-        self.insertButton.setFont(font)
-        self.insertButton.setStyleSheet("QPushButton{\n"
+        self.fileButton.setFont(font)
+        self.fileButton.setStyleSheet("QPushButton{\n"
 "    border-radius: 3px;\n"
 "    background-color: rgb(40,40,40);\n"
 "    color: rgb(157, 157, 157);\n"
@@ -298,8 +298,8 @@ class Ui_MethodWindow(object):
 "    color: rgb(33, 33, 33);\n"
 "}\n"
 "")
-        self.insertButton.setObjectName("insertButton")
-        self.gridLayout_3.addWidget(self.insertButton, 1, 1, 1, 1)
+        self.fileButton.setObjectName("fileButton")
+        self.gridLayout_3.addWidget(self.fileButton, 1, 1, 1, 1)
         self.verticalLayout_7.addWidget(self.fileFrame)
         self.frame_12 = QtWidgets.QFrame(self.methodFrame)
         self.frame_12.setMaximumSize(QtCore.QSize(16777215, 80))
@@ -315,16 +315,16 @@ class Ui_MethodWindow(object):
         self.horizontalLayout_10.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_10.setSpacing(0)
         self.horizontalLayout_10.setObjectName("horizontalLayout_10")
-        self.searchButton = QtWidgets.QPushButton(self.frame_12)
-        self.searchButton.setMinimumSize(QtCore.QSize(0, 30))
-        self.searchButton.setMaximumSize(QtCore.QSize(100, 16777215))
+        self.searchButton_2 = QtWidgets.QPushButton(self.frame_12)
+        self.searchButton_2.setMinimumSize(QtCore.QSize(0, 30))
+        self.searchButton_2.setMaximumSize(QtCore.QSize(100, 16777215))
         font = QtGui.QFont()
         font.setFamily("Bahnschrift SemiBold")
         font.setPointSize(12)
         font.setBold(True)
         font.setWeight(75)
-        self.searchButton.setFont(font)
-        self.searchButton.setStyleSheet("QPushButton{\n"
+        self.searchButton_2.setFont(font)
+        self.searchButton_2.setStyleSheet("QPushButton{\n"
 "    border-radius: 3px;\n"
 "    background-color: rgb(40,40,40);\n"
 "    color: rgb(157, 157, 157);\n"
@@ -343,8 +343,8 @@ class Ui_MethodWindow(object):
 "    color: rgb(33, 33, 33);\n"
 "}\n"
 "")
-        self.searchButton.setObjectName("searchButton")
-        self.horizontalLayout_10.addWidget(self.searchButton)
+        self.searchButton_2.setObjectName("searchButton_2")
+        self.horizontalLayout_10.addWidget(self.searchButton_2)
         self.verticalLayout_7.addWidget(self.frame_12)
         self.gridLayout.addWidget(self.methodFrame, 0, 0, 1, 1)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents_2)
@@ -364,8 +364,8 @@ class Ui_MethodWindow(object):
         self.searchLabel_2.setText(_translate("MethodWindow", "Insira o nome, ID ou sequência nucleotídica"))
         self.sequencesAskLabel_2.setText(_translate("MethodWindow", "Com quantas sequências deseja alinhar?"))
         self.searchLabel_3.setText(_translate("MethodWindow", "ou insira um arquivo \".fasta\""))
-        self.insertButton.setText(_translate("MethodWindow", "Inserir"))
-        self.searchButton.setText(_translate("MethodWindow", "Pesquisar"))
+        self.fileButton.setText(_translate("MethodWindow", "Inserir"))
+        self.searchButton_2.setText(_translate("MethodWindow", "Pesquisar"))
 
 
 if __name__ == "__main__":

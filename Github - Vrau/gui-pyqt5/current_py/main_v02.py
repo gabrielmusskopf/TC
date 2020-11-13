@@ -11,7 +11,7 @@ from validate_email import validate_email
 from loginWindow_v04 import *
 from methodWindow_v06 import *
 from loadingWindow_v01 import *
-from resultWindow_v05 import *
+from resultWindow_v06 import *
 from methods import *
 
 
@@ -81,11 +81,15 @@ class Worker(QRunnable):
 class loginScreen(QMainWindow):
 	def __init__(self):
 		super().__init__()
+
+
 		self.login_ui = Ui_LoginWindow()
 		self.login_ui.setupUi(self)
 
-
-		self.login_ui.movie = QMovie("C:/Users/fabri_000/Documents/_Pesquisas TCC/Bioinformática Python/gui-pyqt5/images/virus.gif")
+		
+		os.chdir('../images')
+		self.login_ui.movie = QMovie(os.getcwd() + "/virus.gif")
+		os.chdir('../current_py')
 		self.login_ui.loginLabel_2.setMovie(self.login_ui.movie)
 		self.login_ui.movie.setScaledSize(QSize(200,100))
 		self.login_ui.movie.start()
@@ -124,37 +128,29 @@ class methodScreen(QMainWindow):
 		# print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
 		# Quando botão é clicado, vai para a função fileBrowser()
-		self.method_ui.fileButton.clicked.connect(self.fileBrowser)
+		self.method_ui.insertButton.clicked.connect(self.fileBrowser)
 		# Quando botão de pesquisar, verifica se a pesquisa é válida
 		self.method_ui.searchButton.clicked.connect(self.isValidSearch)
 
 
 	def fileBrowser(self):
 		self.file_return = OpenDialogBox(self,self.method_ui) # Retorna só o ID
-		# self.method_ui.fileEdit.setText(self.file_return.path)
-
-		if self.file_return != "None":
-			# print(self.file_return)
-			self.method_ui.insertButton.clicked.connect(self.localAlignment)
-			# Alignment(self,self.method_ui)
-
-	def localAlignment(self):
-		self.methodToLoadingScreen()
-		self.backgroundSearch(0,self.file_return)
-		# LocalAlignment(self,self.file_return)
-
-		# self.ldngScrn.multiTrheadSearch(self.file_return)
-		# Função para fazer o alinhameto 
-
+	
 
 
 	def isValidSearch(self):
 		# Verifica se a pesquisa é válida
-		# Se é, envia o identificador '1' para indicar uma pesquisa na WEB
-		self.valid=IsValidSearch(self,self.method_ui)
-		if self.valid:
+		# Verifica qual tipo de pesquisa e envia para o backgroundSearch()
+		# 0 = Local / 1 = Web
+
+		self.valid=IsValidSearch(self,self.method_ui)	# Retorna um objeto com [Pesquisa Válida, Método de pesquisa]
+		if self.valid[0] == True:
 			self.methodToLoadingScreen()
-			self.backgroundSearch(1,self.method_ui)
+			if self.valid[1] == 1:
+				self.backgroundSearch(1,self.method_ui)
+			elif self.valid[1] == 0:
+
+				self.backgroundSearch(0,self.method_ui)	
 
 
 	def methodToLoadingScreen(self):
@@ -180,7 +176,9 @@ class loadingScreen(QMainWindow):
 		self.loading_ui = Ui_LoadingWindow()
 		self.loading_ui.setupUi(self)
 
-		self.loading_ui.movie = QMovie("C:/Users/fabri_000/Documents/_Pesquisas TCC/Bioinformática Python/gui-pyqt5/images/loading_dna02.gif")
+		os.chdir('../images')
+		self.loading_ui.movie = QMovie( os.getcwd()+ "/loading_dna02.gif")
+		os.chdir('../current_py')
 		self.loading_ui.label_2.setMovie(self.loading_ui.movie)
 		self.loading_ui.movie.setScaledSize(QSize(200,200))
 		self.loading_ui.movie.start()
@@ -226,12 +224,6 @@ class resultScreen(QMainWindow):
 
 		self.result_ui = Ui_ResultWindow()
 		self.result_ui.setupUi(self)
-
-		# self.result_ui.resultTree.setText("Texto")
-		# self.result_ui.resultTree.setPixmap(QtGui.QPixmap("C:/Users/fabri_000/Documents/_Pesquisas TCC/Bioinformática Python/gui-pyqt5/images/loading_dna.gif"))
-		
-		# self.mthd = methodScreen("gabrielgmusskopf@gmail.com")
-		# self.jorge = loginScreen()
 
 		self.result_ui.returnButton.clicked.connect(self.returnToMethod)
 		# self.showPhylo()
